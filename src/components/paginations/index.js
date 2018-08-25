@@ -16,10 +16,10 @@ export default class Paginations extends Component {
 		return parseInt((this.state.total/this.state.perPage)+(this.state.total%this.state.perPage>0?1:0));
 	}
 
-	// Calculate median from maxPage state
+	// Calculate median from buttonsCount state
 	median()
 	{
-		return parseInt(this.state.maxPage/2)-(this.state.maxPage%2>1?0:1);
+		return parseInt(this.state.buttonsCount/2)-(this.state.buttonsCount%2>1?0:1);
 	}
 
 	prevPageUrl()
@@ -52,7 +52,7 @@ export default class Paginations extends Component {
 		this.goto(this.state.currentPage+1);
 	}
 
-	// Checking to disable link based on action, example of action: next, previous, ... links 
+	// Checking to disable link based on action, example of action: next, previous, ... links
 	disabled(action)
 	{
 		switch(action)
@@ -67,18 +67,18 @@ export default class Paginations extends Component {
 	startIndex()
 	{
 		let startIndex=1;
-		if(this.pageCount()<this.state.maxPage)
+		if(this.pageCount()<this.state.buttonsCount)
 			startIndex=1;
-		else if(parseInt(this.state.currentPage/this.state.maxPage)>0)
+		else if(parseInt(this.state.currentPage/this.state.buttonsCount)>0)
 		{
-			if((this.state.currentPage-this.median()+this.state.maxPage)<=this.pageCount())
+			if((this.state.currentPage-this.median()+this.state.buttonsCount)<=this.pageCount())
 				startIndex=this.state.currentPage-this.median();
 			else
-				startIndex=this.pageCount()-this.state.maxPage+1;
+				startIndex=this.pageCount()-this.state.buttonsCount+1;
 		}
-		else if(this.state.currentPage%this.state.maxPage>this.state.maxPage-2)
+		else if(this.state.currentPage%this.state.buttonsCount>this.state.buttonsCount-2)
 			startIndex=this.state.currentPage-this.median();
-	
+
 		return startIndex;
 	}
 
@@ -89,8 +89,8 @@ export default class Paginations extends Component {
 		let startIndex=this.startIndex();
 		if(this.pageCount()==this.state.currentPage)
 			endIndex=this.pageCount();
-		else if(startIndex+(this.state.maxPage-1)<=this.pageCount())
-			endIndex=startIndex+(this.state.maxPage-1);
+		else if(startIndex+(this.state.buttonsCount-1)<=this.pageCount())
+			endIndex=startIndex+(this.state.buttonsCount-1);
 		else
 			return this.pageCount();
 
@@ -104,31 +104,31 @@ export default class Paginations extends Component {
 		{
 			let items=[
 				<PaginationItem>
-				  <PaginationLink 
-				  href="#" 
+				  <PaginationLink
+				  href="#"
 				  onClick={(e)=>{e.preventDefault();this.goto(1)}}>
 				  1
-					</PaginationLink>		
+					</PaginationLink>
 				</PaginationItem>,
 				<PaginationItem>
-				  <PaginationLink 
-				  href="#" 
+				  <PaginationLink
+				  href="#"
 				  onClick={(e)=>{e.preventDefault();this.goto(2)}}>
 				  2
-					</PaginationLink>		
+					</PaginationLink>
 				</PaginationItem>,
 				<PaginationItem  disabled={this.disabled()}>
-				  <PaginationLink 
+				  <PaginationLink
 				  href="#" >
 				  ...
-					</PaginationLink>		
+					</PaginationLink>
 				</PaginationItem>
 			];
 			return items;
 		}
 		return ''
 	}
-	
+
 	// Generate last page links
 	lastPage()
 	{
@@ -136,24 +136,24 @@ export default class Paginations extends Component {
 		{
 			let items=[
 				<PaginationItem  disabled={this.disabled()}>
-				  <PaginationLink 
+				  <PaginationLink
 				  href="#" >
 				  ...
 					</PaginationLink>
 				</PaginationItem>,
 				<PaginationItem>
-				  <PaginationLink 
+				  <PaginationLink
 				  href="#"
 				  onClick={(e)=>{e.preventDefault();this.goto(this.pageCount()-1)}}>
 				  {this.pageCount()-1}
-					</PaginationLink>		
+					</PaginationLink>
 				</PaginationItem>,
 				<PaginationItem>
-				  <PaginationLink 
+				  <PaginationLink
 				  href="#"
 				  onClick={(e)=>{e.preventDefault();this.goto(this.pageCount())}}>
 				  {this.pageCount()}
-					</PaginationLink>		
+					</PaginationLink>
 				</PaginationItem>
 			];
 			return items;
@@ -164,24 +164,24 @@ export default class Paginations extends Component {
 	// Loop items using startIndex and endIndex
 	renderItem()
 	{
-	 	let items=[];
-	 	// console.log('start',this.startIndex())
-	 	// console.log('end',this.endIndex())
-	 	for (let i = this.startIndex(); i <= this.endIndex(); i++) {
-	 		let item=(
-	 					<PaginationItem 
-	 						active={i==this.state.currentPage} 
-	 						key={i} 
-	 						onClick={(e)=>{e.preventDefault(); this.goto(i)}}
-	 					>
- 						  <PaginationLink href="#">
- 						    {i}
- 						  </PaginationLink>
- 						</PaginationItem>
-					)
-	 		items.push(item);
-	 	}
-	 	return items;
+		let items=[];
+		// console.log('start',this.startIndex())
+		// console.log('end',this.endIndex())
+		for (let i = this.startIndex(); i <= this.endIndex(); i++) {
+			let item=(
+				<PaginationItem
+					active={i==this.state.currentPage}
+					key={i}
+					onClick={(e)=>{e.preventDefault(); this.goto(i)}}
+				>
+					<PaginationLink href="#">
+						{i}
+					</PaginationLink>
+				</PaginationItem>
+			)
+			items.push(item);
+		}
+		return items;
 	}
 
 	render(){
@@ -190,18 +190,18 @@ export default class Paginations extends Component {
 		return (
 			<Pagination size={this.state.size}>
 				<PaginationItem  disabled={this.disabled('previous')}>
-				  <PaginationLink 
-				  previous 
-				  href="#" 
+				  <PaginationLink
+				  previous
+				  href="#"
 				  onClick={this.next.bind(this)}/>
 				</PaginationItem>
 				{this.firstPage()}
 				{this.renderItem()}
 				{this.lastPage()}
 				<PaginationItem  disabled={this.disabled('next')}>
-				  <PaginationLink 
-				  next 
-				  href="#" 
+				  <PaginationLink
+				  next
+				  href="#"
 				  onClick={this.previous.bind(this)}/>
 				</PaginationItem>
 			</Pagination>
