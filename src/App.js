@@ -23,6 +23,7 @@ class App extends Component {
           <h2>Welcome to React</h2>
         </div>
         <Container>
+          <h4 className="title">Generate Pagination Buttons.</h4>
           <Row>
             <Col xs={12} md={{size: 6, offset:3}}>
               <Form className="myForm">
