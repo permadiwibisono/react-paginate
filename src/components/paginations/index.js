@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import propTypes from 'prop-types';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 export default class Paginations extends Component {
@@ -8,6 +9,8 @@ export default class Paginations extends Component {
 		this.state={
 			...this.props
 		}
+		this.next = this.next.bind(this);
+		this.previous = this.previous.bind(this);
 	}
 
 	// Calculate page count
@@ -77,7 +80,7 @@ export default class Paginations extends Component {
 	{
 		let endIndex=0;
 		let startIndex=this.startIndex();
-		if(this.pageCount()==this.state.currentPage)
+		if(this.pageCount()===this.state.currentPage)
 			endIndex=this.pageCount();
 		else if(startIndex+(this.state.buttonsCount-1)<=this.pageCount())
 			endIndex=startIndex+(this.state.buttonsCount-1);
@@ -133,15 +136,17 @@ export default class Paginations extends Component {
 				</PaginationItem>,
 				<PaginationItem>
 				  <PaginationLink
-				  href="#"
-				  onClick={(e)=>{e.preventDefault();this.goto(this.pageCount()-1)}}>
+						href="#"
+						onClick={(e)=>{e.preventDefault();this.goto(this.pageCount()-1)}}
+					>
 				  {this.pageCount()-1}
 					</PaginationLink>
 				</PaginationItem>,
 				<PaginationItem>
 				  <PaginationLink
-				  href="#"
-				  onClick={(e)=>{e.preventDefault();this.goto(this.pageCount())}}>
+						href="#"
+						onClick={(e)=>{e.preventDefault();this.goto(this.pageCount())}}
+					>
 				  {this.pageCount()}
 					</PaginationLink>
 				</PaginationItem>
@@ -160,7 +165,7 @@ export default class Paginations extends Component {
 		for (let i = this.startIndex(); i <= this.endIndex(); i++) {
 			let item=(
 				<PaginationItem
-					active={i==this.state.currentPage}
+					active={i===this.state.currentPage}
 					key={i}
 					onClick={(e)=>{e.preventDefault(); this.goto(i)}}
 				>
@@ -175,26 +180,42 @@ export default class Paginations extends Component {
 	}
 
 	render(){
-		if(this.state.total==0)
+		if(this.state.total===0)
 			return ('')
 		return (
 			<Pagination size={this.state.size}>
 				<PaginationItem  disabled={this.disabled('previous')}>
 				  <PaginationLink
-				  previous
-				  href="#"
-				  onClick={this.next.bind(this)}/>
+						previous
+						href="#"
+					  onClick={this.next}
+					/>
 				</PaginationItem>
 				{this.firstPage()}
 				{this.renderItem()}
 				{this.lastPage()}
 				<PaginationItem  disabled={this.disabled('next')}>
 				  <PaginationLink
-				  next
-				  href="#"
-				  onClick={this.previous.bind(this)}/>
+						next
+						href="#"
+					  onClick={this.previous}
+					/>
 				</PaginationItem>
 			</Pagination>
 		)
 	}
+}
+
+Paginations.propTypes = {
+	currentPage: propTypes.number,
+	lastPage: propTypes.number.isRequired,
+	perPage: propTypes.number,
+	buttonsCount: propTypes.number,
+	total: propTypes.number.isRequired
+}
+
+Paginations.defaultProps = {
+	currentPage: 1,
+	perPage: 10,
+	buttonsCount: 8,
 }
