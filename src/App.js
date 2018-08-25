@@ -25,10 +25,7 @@ class App extends Component {
               perPage={10}
               total={200}
               buttonsCount={8}
-              path='#'
               currentPage={1}
-              prevPageUrl='#'
-              nextPageUrl='#'
             />
 
           </Col>

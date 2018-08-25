@@ -22,16 +22,6 @@ export default class Paginations extends Component {
 		return parseInt(this.state.buttonsCount/2)-(this.state.buttonsCount%2>1?0:1);
 	}
 
-	prevPageUrl()
-	{
-		return this.state.prevPageUrl===null;
-	}
-
-	nextPageUrl()
-	{
-		return this.state.nextPageUrl===null;
-	}
-
 	// Go to page handles
 	goto(page)
 	{
