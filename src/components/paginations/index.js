@@ -45,6 +45,11 @@ export default class Paginations extends Component {
 		this.goto(this.state.currentPage+1);
 	}
 
+	onButtonClick(e, number){
+		e.preventDefault();
+		this.goto(number);
+	}
+
 	// Checking to disable link based on action, example of action: next, previous, ... links
 	disabled(action)
 	{
@@ -99,14 +104,14 @@ export default class Paginations extends Component {
 				<PaginationItem>
 				  <PaginationLink
 				  href="#"
-				  onClick={(e)=>{e.preventDefault();this.goto(1)}}>
+				  onClick={(e)=>{this.onButtonClick(e, 1)}}>
 				  1
 					</PaginationLink>
 				</PaginationItem>,
 				<PaginationItem>
 				  <PaginationLink
 				  href="#"
-				  onClick={(e)=>{e.preventDefault();this.goto(2)}}>
+				  onClick={(e)=>{this.onButtonClick(e, 2)}}>
 				  2
 					</PaginationLink>
 				</PaginationItem>,
@@ -137,7 +142,7 @@ export default class Paginations extends Component {
 				<PaginationItem>
 				  <PaginationLink
 						href="#"
-						onClick={(e)=>{e.preventDefault();this.goto(this.pageCount()-1)}}
+						onClick={(e)=>{this.onButtonClick(e, this.pageCount()-1)}}
 					>
 				  {this.pageCount()-1}
 					</PaginationLink>
@@ -145,7 +150,7 @@ export default class Paginations extends Component {
 				<PaginationItem>
 				  <PaginationLink
 						href="#"
-						onClick={(e)=>{e.preventDefault();this.goto(this.pageCount())}}
+						onClick={(e)=>{this.onButtonClick(e, this.pageCount())}}
 					>
 				  {this.pageCount()}
 					</PaginationLink>
@@ -167,7 +172,7 @@ export default class Paginations extends Component {
 				<PaginationItem
 					active={i===this.state.currentPage}
 					key={i}
-					onClick={(e)=>{e.preventDefault(); this.goto(i)}}
+					onClick={(e)=>{this.onButtonClick(e, i)}}
 				>
 					<PaginationLink href="#">
 						{i}
