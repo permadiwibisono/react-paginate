@@ -9,18 +9,38 @@ class App extends Component {
     super(props);
     this.state={
       currentPage: 1,
-      lastPage: 4,
+      lastPage: 20,
       total: 200,
       buttonsCount: 8,
       perPage: 10
     }
     this._handleOnChange = this._handleOnChange.bind(this);
+    this._handleOnSubmit = this._handleOnSubmit.bind(this);
+    this._handleOnGotoPage = this._handleOnGotoPage.bind(this);
   }
 
   _handleOnChange(e){
     const lastState = {...this.state};
     lastState[e.target.name] = parseInt(e.target.value);
-    this.setState({...lastState});
+    this.setState({ ...lastState, ...this._generatePaginate(lastState) });
+  }
+  _generatePaginate({ total, perPage, currentPage }){
+    const lastPage = parseInt(total/perPage) + (parseInt(total%perPage)>0?1 : parseInt(total%perPage));
+    return {
+      lastPage,
+      currentPage: lastPage>=currentPage? currentPage: 1
+    }
+  }
+
+  _handleOnSubmit(e){
+    e.preventDefault();
+    this.setState({
+      ...this._generatePaginate(this.state)
+    })
+  }
+
+  _handleOnGotoPage(currentPage){
+    this.setState({currentPage})
   }
 
   render() {
@@ -33,8 +53,8 @@ class App extends Component {
         <Container>
           <h4 className="title">Generate Pagination Buttons.</h4>
           <Row>
-            <Col xs={12} md={{size: 6, offset:3}}>
-              <Form className="myForm">
+            <Col xs={12} md={6}>
+              <Form className="myForm" onSubmit={this._handleOnSubmit}>
                 <Row>
                   <Col xs={12} md={6}>
                     <FormGroup>
@@ -109,19 +129,17 @@ class App extends Component {
                 </FormGroup>
               </Form>
             </Col>
+            <Col xs={12} md={6}>
+              <Paginations
+                size="sm"
+                onGotoPage={this._handleOnGotoPage}
+                perPage={this.state.perPage}
+                total={this.state.total}
+                buttonsCount={this.state.buttonsCount}
+                currentPage={this.state.currentPage}
+              />
+            </Col>
           </Row>
-        </Container>
-        <Container>
-          <Col xs={12}>
-            <Paginations
-              size="sm"
-              lastPage={this.state.lastPage}
-              perPage={this.state.perPage}
-              total={this.state.total}
-              buttonsCount={this.state.buttonsCount}
-              currentPage={this.state.currentPage}
-            />
-          </Col>
         </Container>
       </div>
     );
