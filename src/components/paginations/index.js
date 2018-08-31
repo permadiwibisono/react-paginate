@@ -182,8 +182,8 @@ export default class Paginations extends Component {
 	}
 
 	render(){
-		if(this.props.total===0)
-			return ('')
+		if(this.props.total===0 || this.props.total==='')
+			return null
 		return (
 			<Pagination size={this.props.size}>
 				<PaginationItem  disabled={this.disabled('previous')}>
