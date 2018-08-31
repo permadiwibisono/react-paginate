@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Col, Form, FormGroup, Label, Input, Button, Row } from 'reactstrap';
 import logo from './logo.svg';
 import Paginations from './components/paginations';
+import ExampleList from './components/list';
 import './App.css';
 
 class App extends Component {
@@ -12,11 +13,17 @@ class App extends Component {
       lastPage: 20,
       total: 200,
       buttonsCount: 8,
-      perPage: 10
+      perPage: 10,
+      list: []
     }
     this._handleOnChange = this._handleOnChange.bind(this);
     this._handleOnSubmit = this._handleOnSubmit.bind(this);
     this._handleOnGotoPage = this._handleOnGotoPage.bind(this);
+  }
+
+  componentDidMount(){
+    const { currentPage, total, perPage } = this.state;
+    this.setState({list: this._getList(currentPage, perPage, total)})
   }
 
   _handleOnChange(e){
@@ -24,12 +31,24 @@ class App extends Component {
     lastState[e.target.name] = parseInt(e.target.value);
     this.setState({ ...lastState, ...this._generatePaginate(lastState) });
   }
+
   _generatePaginate({ total, perPage, currentPage }){
     const lastPage = parseInt(total/perPage) + (parseInt(total%perPage)>0?1 : parseInt(total%perPage));
+    const newCurrentPage = lastPage>=currentPage? currentPage: 1;
     return {
       lastPage,
-      currentPage: lastPage>=currentPage? currentPage: 1
+      currentPage: newCurrentPage,
+      list: this._getList(newCurrentPage, perPage, total)
     }
+  }
+
+  _getList(currentPage, perPage, total){
+    const list = [];
+    const end = ((currentPage-1)*perPage)+perPage<=total?((currentPage-1)*perPage)+perPage:total;
+    for(let i=(currentPage-1)*perPage;i<end;i++){
+      list.push(`Data ${i+1}`)
+    }
+    return list;
   }
 
   _handleOnSubmit(e){
@@ -40,7 +59,8 @@ class App extends Component {
   }
 
   _handleOnGotoPage(currentPage){
-    this.setState({currentPage})
+    const { total, perPage } = this.state;
+    this.setState({currentPage, list: this._getList(currentPage, perPage, total)})
   }
 
   render() {
@@ -130,6 +150,7 @@ class App extends Component {
               </Form>
             </Col>
             <Col xs={12} md={6}>
+              <ExampleList list={this.state.list}/>
               <Paginations
                 size="sm"
                 onGotoPage={this._handleOnGotoPage}
