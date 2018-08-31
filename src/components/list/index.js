@@ -2,7 +2,7 @@ import React from 'react';
 import { List, AutoSizer } from 'react-virtualized';
 
 const Item = ({ children, style}) =>(
-  <div style={{padding: "6px 12px", textAlign: "left", border: "1px solid #ddd", ...style}}>
+  <div style={{padding: "6px 12px", textAlign: "left", border: "1px solid #ddd", display: 'flex', flexDirection: 'row', alignItems: 'center', ...style}}>
     { children }
   </div>
 )
@@ -27,12 +27,14 @@ const rowRenderer =  ({
 }
 
 const ExampleList = props => (
-  <div style={{marginBottom: '1rem'}}>
-    <AutoSizer disableHeight>
+  <div style={{marginBottom: '1rem', display: 'flex', minHeight: 300, height: '100%', flex: "1 1 auto"}}>
+    <AutoSizer
+      defaultHeight={300}
+    >
       {
-        ({width})=>(
+        ({width, height})=>(
           <List
-            height={300}
+            height={height}
             width={width}
             list={props.list}
             rowCount={props.list.length}
